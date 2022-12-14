@@ -1,0 +1,20 @@
+{% extends "base_bootstrap.html" %}
+
+{% block content %}
+  <h1>Reciept List</h1>
+  {% if reciept_list %}
+  <ul>
+    {% for reciept in reciept_list %}
+      <li>
+          {{ reciept.store_name }}
+          (<a href="{% url 'autos:auto_update' auto.id %}">Update</a> |
+          <a href="{% url 'autos:auto_delete' auto.id %}">Delete</a>) <br/>
+          ${{ reciept.total }})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no reciepts in the library.</p>
+  {% endif %}
+  <a href="">Add a reciept</a>
+{% endblock %}
