@@ -2,19 +2,29 @@
 
 {% block content %}
   <h1>Reciept List</h1>
+  <div style="float:right">
+    <!-- https://www.w3schools.com/howto/howto_css_search_button.asp -->
+    <form>
+      <input type="text" placeholder="Search.." name="search"
+      {% if search %} value="{{ search }}" {% endif %}
+      >
+      <button type="submit"><i class="fa fa-search"></i></button>
+    <a href="{% url 'bill:all' %}"><i class="fa fa-undo"></i></a>
+    </form>
+    </div>
   {% if reciept_list %}
   <ul>
     {% for reciept in reciept_list %}
       <li>
-          {{ reciept.store_name }}
-          (<a href="{% url 'autos:auto_update' auto.id %}">Update</a> |
-          <a href="{% url 'autos:auto_delete' auto.id %}">Delete</a>) <br/>
-          ${{ reciept.total }})
+        <a href="{% url 'bill:reciept_detail'  reciept.id %}">{{ reciept.store_name }}</a>
+        (<a href="{% url 'bill:reciept_update' reciept.id %}">Update</a> |
+        <a href="{% url 'bill:reciept_delete' reciept.id %}">Delete</a>) <br/>
+        (Total =${{ reciept.total|floatformat:2 }})
       </li>
     {% endfor %}
   </ul>
   {% else %}
     <p>There are no reciepts in the library.</p>
   {% endif %}
-  <a href="">Add a reciept</a>
+  <a href="{%url 'bill:reciept_create' %}">Add a reciept</a>
 {% endblock %}

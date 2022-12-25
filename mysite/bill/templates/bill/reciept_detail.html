@@ -1,0 +1,71 @@
+{% extends "base_bootstrap.html" %}
+
+{% block content %}
+<span style="float: right;">
+    <a href="{% url 'bill:reciept_update' reciept.id %}"><i class="fa fa-pencil"></i></a>
+    <a href="{% url 'bill:reciept_delete' reciept.id %}"><i class="fa fa-trash"></i></a>
+</span>
+<h1>{{ reciept.store_name }}</h1>
+<p>
+    Price Before Tax and Tip: ${{ reciept.total_before_tax|floatformat:2 }}</br>
+    Tax: ${{ reciept.tax|floatformat:2 }}</br>
+    Tip: ${{ reciept.tip|floatformat:2 }}</br>
+    Tax Rate: {{reciept.tax_percent|floatformat:4 }}</br>
+    Tip Rate: {{reciept.tip_percent|floatformat:2 }}</br>
+    Total Price: ${{ reciept.total|floatformat:2 }}</br>
+</p>
+{% if reciept_items %}
+<ul>
+    {% for key, value in reciept_items.items %}
+      <li>
+        {% for component in value %}
+        {{ component }}
+        {% endfor %}<a href="{% url 'bill:reciept_item_delete' key %}"><i class="fa fa-trash"></i></a>
+      </li>
+    {% endfor %}
+</ul> 
+{% else %}
+<p>Add people and then items.</p>
+{% endif %}
+
+<h3>Total Balances</h3>
+<p>
+    {% for person in persons %}
+    {{ person.name }}: ${{ person.balance|floatformat:3 }}</br>
+    {% endfor %}
+</p>
+
+<p>
+    <a href="{% url 'bill:all' %}">All reciepts</a>
+</p>
+<p>
+    {% load crispy_forms_tags %}
+    <form method="post" action="{% url 'bill:reciept_person_create' reciept.id %}">
+        {% csrf_token %}
+        {{ person_form|crispy }}
+    <input type="submit" value="Submit">
+    <input type="submit" value="All Reciepts" onclick="window.location.href='{% url 'bill:all' %}';return false;">
+    </form>
+</p>
+<h3>People to split between</h3>
+<p>
+    {% load crispy_forms_tags %}
+    <form method="post" action="{% url 'bill:reciept_item_create' reciept.id %}">
+        {% csrf_token %}
+        {{ item_form|crispy }}
+        <p>Select people to split the item: <br/>
+            {% for person in persons %}
+            <input type="checkbox" name="person" value="{{ person.id }}">
+            <label for="person"> {{ person.name }}</label>
+            <a href="{% url 'bill:reciept_person_delete' person.id %}"><i class="fa fa-trash"></i></a>
+            <br>
+            {% endfor %}
+        </p>
+    <input type="submit" value="Submit">
+    <input type="submit" value="All Reciepts" onclick="window.location.href='{% url 'bill:all' %}';return false;">
+    </form>
+</p>
+
+
+
+{% endblock %}

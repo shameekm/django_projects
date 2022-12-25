@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bill.apps.BillConfig',
+    'django_extensions',
+    'crispy_forms',
+    'rest_framework',
+    'social_django',
+    'taggit',
 ]
 
 MIDDLEWARE = [
