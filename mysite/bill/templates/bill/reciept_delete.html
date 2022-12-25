@@ -6,6 +6,7 @@
 
 <form action="" method="POST">
   {% csrf_token %}
-  <input type="submit" value="Yes, delete.">
+  <input type="submit" class="btn btn-primary" value="Yes, delete.">
+  <a href="{% url 'bill:all' %}" class="btn btn-secondary">Cancel</a>
 </form>
-{% endblock %}
+{% endblock %}z

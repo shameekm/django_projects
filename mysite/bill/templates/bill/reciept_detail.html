@@ -35,16 +35,13 @@
     {% endfor %}
 </p>
 
-<p>
-    <a href="{% url 'bill:all' %}">All reciepts</a>
-</p>
+
 <p>
     {% load crispy_forms_tags %}
     <form method="post" action="{% url 'bill:reciept_person_create' reciept.id %}">
         {% csrf_token %}
         {{ person_form|crispy }}
     <input type="submit" value="Submit">
-    <input type="submit" value="All Reciepts" onclick="window.location.href='{% url 'bill:all' %}';return false;">
     </form>
 </p>
 <h3>People to split between</h3>
@@ -62,10 +59,11 @@
             {% endfor %}
         </p>
     <input type="submit" value="Submit">
-    <input type="submit" value="All Reciepts" onclick="window.location.href='{% url 'bill:all' %}';return false;">
     </form>
 </p>
-
+<p>
+    <a href="{% url 'bill:all' %}" class="btn btn-primary">All reciepts</a>
+</p>
 
 
 {% endblock %}
