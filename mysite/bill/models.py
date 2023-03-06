@@ -1,10 +1,10 @@
 from django.db import models
 
 class Reciept(models.Model):
-    store_name = models.CharField(max_length=200)
+    store_name = models.CharField(max_length=200, verbose_name= ('Store and Reciept Owner Name'))
     total_before_tax = models.DecimalField(max_digits=19, decimal_places=10, null=True)
-    tax = models.DecimalField(max_digits=19, decimal_places=10, null=True)
-    tip = models.DecimalField(max_digits=19, decimal_places=10, null=True)
+    tax = models.DecimalField(max_digits=19, decimal_places=10, null=True, verbose_name= ('Dollar Tax Amount'))
+    tip = models.DecimalField(max_digits=19, decimal_places=10, null=True, verbose_name= ('Dollar Tip Amount'))
     total = models.DecimalField(max_digits=19, decimal_places=10, null=True)
     tax_percent = models.DecimalField(max_digits=19, decimal_places=10, null=True)
     tip_percent = models.DecimalField(max_digits=19, decimal_places=10, null=True)
@@ -22,13 +22,13 @@ class Reciept(models.Model):
     @property
     def get_total(self):
         return float(self.tax) + float(self.tip) + float(self.total_before_tax)
-    
+
     def save(self, *args, **kwargs):
         self.tax_percent = self.get_tax_percent
         self.tip_percent = self.get_tip_percent
         self.total = self.get_total
         super(Reciept, self).save(*args, **kwargs)
-    
+
     def __str__(self):
         return self.store_name
 
@@ -45,7 +45,7 @@ class Person(models.Model):
     balance = models.DecimalField(max_digits=7, decimal_places=3, null=True)
     reciept = models.ForeignKey(Reciept, on_delete=models.CASCADE)
     items = models.ManyToManyField('Item', through='Split')
-    
+
     @property
     def get_balance(self):
         items = Item.objects.filter(persons=self.id)
@@ -60,7 +60,7 @@ class Person(models.Model):
     def save(self, *args, **kwargs):
         self.balance = self.get_balance
         super(Person, self).save(*args, **kwargs)
-    
+
     def __str__(self):
         return self.name
 
